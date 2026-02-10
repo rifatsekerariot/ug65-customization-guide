@@ -1,0 +1,6 @@
+# Add these lines to /home/rc.local.custom on the device (as root)
+# so that after boot, DHCP server binds to br-lan and Ethernet clients get IP.
+
+sleep 2
+echo " -d -cf /etc/dhcp3/dhcpd.conf -lf /etc/dhcp3/dhcpd.leases br-lan" > /tmp/dhcpd_param
+/etc/init.d/dhcpd restart

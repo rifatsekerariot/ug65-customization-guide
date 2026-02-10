@@ -1,0 +1,31 @@
+#!/bin/sh /etc/rc.common
+# Ethernet + WiFi LAN bridge for Milesight UG65
+# Place in /etc/init.d/ and run: chmod +x /etc/init.d/eth_lan_bridge; /etc/init.d/eth_lan_bridge enable
+
+START=25
+STOP=15
+
+start_service() {
+    sleep 3
+    [ -d /sys/class/net/br-lan ] && ip addr show br-lan | grep -q 192.168.10.1 && return 0
+    ip link add name br-lan type bridge 2>/dev/null || true
+    ip link set wlan0 master br-lan 2>/dev/null
+    ip link set eth0 master br-lan 2>/dev/null
+    ip addr flush dev wlan0 2>/dev/null
+    ip addr flush dev eth0 2>/dev/null
+    ip addr add 192.168.10.1/24 dev br-lan
+    ip link set br-lan up
+    ip link set wlan0 up
+    ip link set eth0 up
+    echo " -d -cf /etc/dhcp3/dhcpd.conf -lf /etc/dhcp3/dhcpd.leases br-lan" > /tmp/dhcpd_param
+    /etc/init.d/dhcpd restart 2>/dev/null
+    return 0
+}
+
+stop_service() {
+    ip link set br-lan down 2>/dev/null
+    ip link set wlan0 nomaster 2>/dev/null
+    ip link set eth0 nomaster 2>/dev/null
+    ip link delete br-lan 2>/dev/null
+    return 0
+}

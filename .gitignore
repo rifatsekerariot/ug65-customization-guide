@@ -1,0 +1,23 @@
+# Root erişim veya hassas bilgi içeren dosyalar – repoya eklenmez
+ROOT_ERISIM.md
+setroot.txt
+append_rc.sh
+rc_local_append.txt
+ETHERNET_LAN_AYARLARI.md
+Milesight_UG65_Inceleme_Raporu.md
+Kontrol_Raporu_192.168.10.1.md
+
+# Şifre / gizlilik
+*password*
+*secret*
+*.key
+
+# Logo ve marka özelleştirmeleri
+*logo*
+*ariot*
+
+# Geçici / yerel
+*.bak
+*~
+.DS_Store
+Thumbs.db
